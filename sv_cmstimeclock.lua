@@ -15,7 +15,7 @@ CreateThread(function()
 
 			AddEventHandler('SonoranCAD::pushevents:UnitLogin', function(unit)
 				activeUnits[unit.id] = unit
-				TriggerEvent('SonoranCMS::pushevents::UnitLogin', unit.data.apiIds[1])
+				TriggerEvent('SonoranCMS::pushevents::UnitLogin', unit.accId)
 			end)
 
 			AddEventHandler('SonoranCAD::pushevents:UnitLogout', function(id)
@@ -24,14 +24,14 @@ CreateThread(function()
 					exports['sonorancad']:performApiRequest({{['serverId'] = GetConvar('sonoran_serverId', '1')}}, 'GET_ACTIVE_UNITS', function(res)
 						if res ~= nil and type(res) == 'table' then
 							for i, value in pairs(res) do
-								if value.id == activeUnits[id].id then
+								if value.accId == activeUnits[id].accId then
 									foundUnit = true
 									return
 								end
 							end
 						end
 						if not foundUnit then
-							TriggerEvent('SonoranCMS::pushevents::UnitLogout', activeUnits[id].data.apiIds[1])
+							TriggerEvent('SonoranCMS::pushevents::UnitLogout', activeUnits[id].accId)
 							activeUnits[id] = nil
 						end
 					end)
